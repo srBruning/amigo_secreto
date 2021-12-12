@@ -1,0 +1,35 @@
+.container {
+  background-color: #ffffff;
+  flex: 1;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.ImgLogo {
+  width: 130px;
+  height: 95px;
+  margin-top: 36px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.H1Label {
+  font-size: 36px;
+  color: #ff5a5a;
+  font-weight: bold;
+}
+
+.LinkLabel {
+  font-size: 14px;
+  color: #ff5a5a;
+  font-weight: bold;
+  margin-top: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  text-decoration: underline;
+  text-decoration-color: #ff5a5a;
+}
+
+.BtnArea {
+  margin-top: 50px;
+}
