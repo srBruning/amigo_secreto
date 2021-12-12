@@ -51,6 +51,7 @@ routes.get('/api/', verifyJWT, (req, res) => {
   res.json({message: "hello word "+req.userId});
 });
 
+app.use('/', express.static('public'));
 routes.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, "app", "index.html"));
 });
