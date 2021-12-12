@@ -33,4 +33,15 @@ app.use(
   "/files", 
   express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
 );
+
+
+// redirecionar 404 quando não for api
+routes.get("*", function (req, res, next) {
+  if (!req.path || req.path.startsWith("/api") || req.path === "/") {
+    res.status(404).send({ message: "Nenhum grupo encontrado" });
+  } else res.redirect("/");
+});
+
+
+
 app.listen(3636);
