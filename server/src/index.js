@@ -8,7 +8,8 @@ const app = express();
 require('./app/database');
 const routes = require('./routes');
 
-
+routes.use('/', express.static('public'));
+ 
 app.use(express.json());
 const corsOptions = {
   origin: '*',
