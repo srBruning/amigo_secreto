@@ -41,7 +41,7 @@ const Perfil = () => {
     setPerfil({ ...perfil, ...obj });
   };
 
-  const handleSingUpClike = (e) => {
+  const handleSaveClike = (e) => {
     
     e.preventDefault();
     e.stopPropagation();
@@ -66,7 +66,7 @@ const Perfil = () => {
         alert("Erro: " + json.error);
         return;
       }
-      return setPerfil(json);
+      return buscarPerfil();
     });
   };
 
@@ -120,7 +120,7 @@ const Perfil = () => {
         {inUpload || !perfil ? (
           <Dots />
         ) : (
-          <Form noValidate onSubmit={handleSingUpClike}>
+          <Form noValidate onSubmit={handleSaveClike}>
             <Form.Group className="mb-3" onChange={(t) => handleChangeField(t)}>
               <Form.Label>Nome Completo</Form.Label>
               <Form.Control
