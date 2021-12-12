@@ -66,6 +66,7 @@ const Perfil = () => {
         alert("Erro: " + json.error);
         return;
       }
+      alert("Atualizado com sucesso!")
       return buscarPerfil();
     });
   };

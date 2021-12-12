@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Api from "../Api";
 import { Dots } from "react-activity";
+import Resizer from "react-image-file-resizer";
 
 class FileUpload extends Component {
   constructor() {
@@ -15,12 +16,34 @@ class FileUpload extends Component {
     inUpload: false,
   };
 
+
+  resizeFile = (file) =>
+  new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      180,
+      180,
+      "JPEG",
+      70,
+      0,
+      (uri) => {
+        resolve(uri);
+      },
+      "blob"
+    );
+  });
+
+
+
   // On file select (from the pop up)
-  onFileChange = (event) => {
+  onFileChange = async (event) => {
+    const file = event.target.files[0];
+    const image = await this.resizeFile(file);
+
     // Update the state
-    this.setState({ selectedFile: event.target.files[0] });
+    this.setState({ selectedFile: image });
     if (this.props.autoUpload)
-      this.onFileUpload({ selectedFile: event.target.files[0] });
+      this.onFileUpload({ selectedFile: image });
   };
 
   // On file upload (click the upload button)
@@ -40,35 +63,7 @@ class FileUpload extends Component {
       });
   };
 
-  // File content to be displayed after
-  // file upload is complete
-  fileData = () => {
-    if (this.state.selectedFile) {
-      return (
-        <div>
-          <h2>File Details:</h2>
-
-          <p>File Name: {this.state.selectedFile.name}</p>
-
-          <p>File Type: {this.state.selectedFile.type}</p>
-
-          <p>
-            Last Modified:{" "}
-            {this.state.selectedFile.lastModifiedDate.toDateString()}
-          </p>
-        </div>
-      );
-    } else {
-      return (
-        <div>
-          <br />
-          <h4>Choose before Pressing the Upload button</h4>
-        </div>
-      );
-    }
-  };
-
-  handleClick = (e) => {
+   handleClick = (e) => {
     this.inputElement.click();
   };
   render() {
