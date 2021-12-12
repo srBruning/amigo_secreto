@@ -59,7 +59,7 @@ class UserController {
 
       _user.user_name = undefined;
       _user.picture_avatar_id = undefined;
-      _user.perfil.picture_avatar = undefined;
+      _user.picture_avatar = undefined;
 
       const user = await User.findByPk(req.userId);
       if (user == null) return res.status(404);

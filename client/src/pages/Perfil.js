@@ -42,7 +42,7 @@ const Perfil = () => {
   };
 
   const handleSingUpClike = (e) => {
-    console.log("##1");
+    
     e.preventDefault();
     e.stopPropagation();
     if (e.nativeEvent) e.nativeEvent.stopImmediatePropagation();
@@ -50,7 +50,7 @@ const Perfil = () => {
     const send = Object.fromEntries(
       Object.entries(perfil).filter(([_, v]) => v != null)
     );
-    console.log("##1.1");
+    
     if (
       indPassword &&
       (send.password == null || send.password !== send.rePassword)
@@ -58,10 +58,10 @@ const Perfil = () => {
       alert("Senhas não confere!");
       return;
     }
-    console.log(JSON.stringify(send));
+    
 
     Api.atualizarUsuario(send).then((json) => {
-      console.log(JSON.stringify(json));
+      
       if (json.error) {
         alert("Erro: " + json.error);
         return;
