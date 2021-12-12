@@ -1,9 +1,7 @@
 import cookie from "react-cookies";
 import axios from "axios";
 
-// const BASE_API ="http://localhost:3737";
-// const BASE_API = "http://207.154.237.32:3636";
-const BASE_API = "https://dibr.cc";
+const BASE_API = process.env.APP_URL;
 
 const _currentToken = async () => {
   let token = await cookie.load("token");
