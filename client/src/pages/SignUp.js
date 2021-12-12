@@ -48,7 +48,7 @@ class SignUpClass extends Component {
           alert("cadastrado com sucesso!");
           // Goto home
           const { history } = this.props;
-          if (history) history.push("/Home");
+          if (history) history.push("/Perfil");
         } else {
           event.preventDefault();
           alert(json.message);
