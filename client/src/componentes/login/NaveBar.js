@@ -23,9 +23,9 @@ const MNavBar = (props, bg) => {
     <Navbar bg="light" expand="lg" className="app_menu">
       <Container fluid>
         <Navbar.Brand href="#">
-          <a href="/" className="navbar-brand">
+          <Link to="/" className="navbar-brand">
             <Image src="/logo100.png" alt="logo" width="45" />
-          </a>
+          </Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
@@ -34,15 +34,15 @@ const MNavBar = (props, bg) => {
             style={{ maxHeight: "200px" }}
             navbarScroll
           >
-            <Nav.Link className={"button-" + tBtn} href="/">
+            <Link className={"nav-link button-" + tBtn} to="/">
               Meus Grupos
-            </Nav.Link>
-            <Nav.Link className={"button-" + tBtn} href="/Perfil">
+            </Link>
+            <Link className={"nav-link button-" + tBtn} to="/Perfil">
               Perfil
-            </Nav.Link>
-            <Nav.Link className={"button-" + tBtn} href="/GrupForm">
+            </Link>
+            <Link className={"nav-link button-" + tBtn} to="/GrupForm">
               Novo Grupo
-            </Nav.Link>
+            </Link>
           </Nav>
           <div className="d-flex">
             <Link to="/SignIn" className="mr-sm-2">
@@ -61,34 +61,3 @@ const MNavBar = (props, bg) => {
   );
 };
 export default MNavBar;
-
-// <header className="header">
-//         <Container>
-//           <Row>
-//             <Col sm="6" md="2" lg="2" xs="12">
-//               {/* Navbar Brand */}
-//               <a href="/" className="navbar-brand">
-//                 <Image src="/logo100.png" alt="logo" width="45" />
-//               </a>
-//             </Col>
-
-//             <Col sm="6" md="2" lg="2" xs="12">
-//               <Link className={"button-" + tBtn} to="/">
-//                 Inicio
-//               </Link>
-//             </Col>
-//             <Col sm="6" md="2" lg="2" xs="12">
-//               <Link className={"button-" + tBtn} to="/GrupForm">
-//                 Criar Grupo
-//               </Link>
-//             </Col>
-//             <Col sm="6" md="2" lg="2" xs="12">
-//               <Link className={"button-" + tBtn} to="/Perfil">
-//                 Perfil
-//               </Link>
-//             </Col>
-//             <Col sm="6" md="2" lg="2" xs="12">
-
-//             </Col>
-//           </Row>
-//         </Container>
