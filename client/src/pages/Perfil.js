@@ -22,7 +22,6 @@ const Perfil = () => {
   const buscarPerfil = async () => {
     const _perfil = await Api.buscarPerfil();
     setPerfil(_perfil);
-    
   };
 
   const onUpload = (p) => {
@@ -47,8 +46,10 @@ const Perfil = () => {
     e.preventDefault();
     e.stopPropagation();
     if (e.nativeEvent) e.nativeEvent.stopImmediatePropagation();
-    
-    const send = Object.fromEntries(Object.entries(perfil).filter(([_, v]) => v != null));
+
+    const send = Object.fromEntries(
+      Object.entries(perfil).filter(([_, v]) => v != null)
+    );
     console.log("##1.1");
     if (
       indPassword &&
@@ -158,7 +159,7 @@ const Perfil = () => {
             <Form.Group className="mb-3" onChange={(t) => handleChangeField(t)}>
               <Form.Label>Numero do whatsapp</Form.Label>
               <Form.Control
-                defaultValue={perfil.whatsapp }
+                defaultValue={perfil.whatsapp}
                 placeholder="54992863393"
                 aria-label="Numero do whatsapp"
                 aria-describedby="basic-addon1"
@@ -215,31 +216,24 @@ const Perfil = () => {
                 </div>
               )}
             </div>
-            <div>
-              {/* Submit Button  */}
-              <Button
-                type="submit"
-                variant="primary"
-                disabled={
-                  indPassword &&
-                  (perfil.password == null ||
-                    perfil.password === "" ||
-                    perfil.password !== perfil.rePassword)
-                }
-              >
-                Registre-se
-              </Button>
-              {/* Divider Text */}
-              <div className="form-group col-lg-12 mx-auto d-flex align-items-center my-4">
-                <div className="border-bottom w-100 ml-5"></div>
-                <span className="px-2 small text-muted font-weight-bold text-muted">
-                  ou
-                </span>
-                <div className="border-bottom w-100 mr-5"></div>
-              </div>
-              <Button variant="secondary" onClick={perfil.handleSingClike}>
-                Login
-              </Button>
+            <div className="shadow-none p-3 mb-5 bg-white rounded d-flex justify-content-center">
+              <Row>
+                {/* Submit Button  */}
+                <Col sm="6" xs="12">
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    disabled={
+                      indPassword &&
+                      (perfil.password == null ||
+                        perfil.password === "" ||
+                        perfil.password !== perfil.rePassword)
+                    }
+                  >
+                    Salvar
+                  </Button>
+                </Col>
+              </Row>
             </div>
           </Form>
         )}
