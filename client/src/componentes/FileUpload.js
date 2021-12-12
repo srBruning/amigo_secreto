@@ -21,10 +21,10 @@ class FileUpload extends Component {
   new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,
-      180,
-      180,
+      100,
+      100,
       "JPEG",
-      70,
+      60,
       0,
       (uri) => {
         resolve(uri);
@@ -48,10 +48,13 @@ class FileUpload extends Component {
 
   // On file upload (click the upload button)
   onFileUpload = ({ selectedFile }) => {
+
     this.setState({ inUpload: true });
     if (this.props.uploadListner) this.props.uploadListner(true);
 
-    if (selectedFile === undefined) selectedFile = this.state.selectedFile;
+    if (selectedFile === undefined) {
+      selectedFile = this.state.selectedFile;
+    }
 
     Api.uploadAvatar(selectedFile)
       .then((resp) => {
