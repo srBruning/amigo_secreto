@@ -21,10 +21,10 @@ class FileUpload extends Component {
   new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,
-      200,
-      200,
+      300,
+      300,
       "JPEG",
-      90,
+      100,
       0,
       (uri) => {
         resolve(uri);
