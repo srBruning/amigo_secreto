@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import { withRouter, Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import NavBar from "../componentes/login/NaveBar";
 import { useRollbar } from '@rollbar/react';
 
@@ -194,8 +194,8 @@ class SignUpClass extends Component {
 export const withHooks = (Component) => {
   return (props) => {
     const rollbar = useRollbar(); // <-- must have parent Provider
-    
-    return <Component rollbar={rollbar} {...props} />;
+    const history = useHistory();
+    return <Component rollbar={rollbar} history={history} {...props} />;
   };
 };
  

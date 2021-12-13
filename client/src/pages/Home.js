@@ -26,6 +26,7 @@ const Home = () => {
     const token = await Api.currentToken();
     if (token) {
       const lstGrupos = await Api.buscarGrupos(token);
+      
       setgrupos(lstGrupos);
       return true;
     }
@@ -58,11 +59,47 @@ const Home = () => {
     }
   };
 
+  const montaGrupoItem = (item) => {
+    return (
+      <Col className="col-12 col-sm-6 col-md-6 col-lg-4">
+        <Card
+          key={item.id}
+          className="card  shadow p-3 mb-5 bg-white rounded"
+          onClick={() => {
+            history.push({
+              pathname: "/GrupoInfo",
+              search: "?grupo=" + item.grupo.chave,
+              state: { grupo: item.grupo },
+            });
+            //navigation.navigate("GrupoInfo", item.grupo);
+          }}
+        >
+          <img className="card-img-top" src="/grup.png" alt="Avatar"></img>
+          <div className="card-body">
+            <h5 className="card-title">{item.grupo.name}</h5>
+            {item.chave}
+          </div>
+          <div className="card-body"></div>
+          <div className="card-body">
+            <Button
+              className="card-link"
+              onClick={() => {
+                navigator.clipboard.writeText(item.grupo.chave);
+              }}
+            >
+              <b>Chave:</b> {item.grupo.chave}
+            </Button>
+          </div>
+        </Card>
+      </Col>
+    );
+  };
+
   return (
     <Autentication>
       <NavBar></NavBar>
       <Container>
-        <section className="url-shortener">
+        <section className="shadow p-3 mb-5 bg-white rounded">
           <h2 className="title mb-0">Entrar em um grupo:</h2>
           <form>
             <Row>
@@ -87,41 +124,15 @@ const Home = () => {
           </form>
         </section>
 
-        <Row>
-          {grupos &&
-            grupos.map((item) => {
-              return (
-                <Card
-                  key={item.id}
-                  className="card col-12 col-sm-6 col-md-6 col-lg-4"
-                  onClick={() => {
-                    history.push({
-                      pathname: "/GrupoInfo",
-                      search: "?grupo=" + item.grupo.chave,
-                      state: { grupo: item.grupo },
-                    });
-                    //navigation.navigate("GrupoInfo", item.grupo);
-                  }}
-                >
-                  <div className="card-body">
-                    <h5 className="card-title">{item.grupo.name}</h5>
-                    {item.chave}
-                  </div>
-                  <div className="card-body"></div>
-                  <div className="card-body">
-                    <Button
-                      className="card-link"
-                      onClick={() => {
-                        navigator.clipboard.writeText(item.grupo.chave);
-                      }}
-                    >
-                      <b>Chave:</b> {item.grupo.chave}
-                    </Button>
-                  </div>
-                </Card>
-              );
-            })}
-        </Row>
+        <div className="shadow-none p-3 mb-5 bg-white rounded">
+          <h2 className="title mb-0"> Meus Grupos:</h2>
+          <Row>
+            {grupos &&
+              grupos.map((item) => {
+                return montaGrupoItem(item);
+              })}
+          </Row>
+        </div>
       </Container>
     </Autentication>
   );
