@@ -1,5 +1,6 @@
 import React from "react";
 import Api from "../Api";
+import cookie from "react-cookies";
 
 export const validaUserResponse = async (json) => {
   console.log(json);
@@ -35,3 +36,24 @@ export const validarSingUpData = (nome, email, senha) => {
 
   return false;
 };
+
+
+export const guardaChaveGrupo = async (token) => {
+  await cookie.save("keyGrupo", token, { path: "/" });
+  await localStorage.setItem("keyGrupo", token);
+};
+
+export const removeChaveGrupo = async () => {
+  await cookie.remove("keyGrupo", { path: "/" });
+  await localStorage.removeItem("keyGrupo");
+};
+
+export const getChaveGrupo = async () => {
+  let token = await cookie.load("keyGrupo");
+  if (token && token != null && token != "null") return token;
+  
+  token = await localStorage.getItem("keyGrupo");
+  await cookie.save("keyGrupo", token, { path: "/" });
+  return token;
+};
+

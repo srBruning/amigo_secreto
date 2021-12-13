@@ -3,7 +3,7 @@ import Api from "../Api";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import MaskedFormControl from "react-bootstrap-maskedinput";
 import FileUpload from "../componentes/FileUpload";
-import Autentication from "../componentes/Autentication";
+import Authentication from "../componentes/Authentication";
 import { Dots } from "react-activity";
 import "./Perfil.css";
 import NavBar from "../componentes/login/NaveBar";
@@ -65,7 +65,7 @@ const Perfil = () => {
   };
 
   return (
-    <Autentication>
+    <Authentication>
       <NavBar></NavBar>
       <Container>
         <Row>
@@ -235,7 +235,7 @@ const Perfil = () => {
           </Form>
         )}
       </Container>
-    </Autentication>
+    </Authentication>
   );
 };
 

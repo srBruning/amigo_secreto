@@ -1,7 +1,8 @@
 import cookie from "react-cookies";
 import axios from "axios";
+import { validaUserResponse } from "./dao/UserDao";
 
-const BASE_API = process.env.REACT_APP_API;//"http://207.154.237.32:4646";
+const BASE_API = process.env.REACT_APP_API; //"http://207.154.237.32:4646";
 
 const _currentToken = async () => {
   let token = await cookie.load("token");
@@ -16,6 +17,7 @@ const _guardaToken = async (token) => {
   await cookie.save("token", token, { path: "/" });
   await localStorage.setItem("token", token);
 };
+
 const _removeToken = async () => {
   await cookie.remove("token", { path: "/" });
   await localStorage.removeItem("token");
@@ -101,7 +103,11 @@ const Api = {
     return await doPost({ token }, "/api/auth/logout");
   },
   signUp: async (name, email, password) => {
-    return await doPost({ name, user_name: email, password }, "/api/user");
+    const json = await doPost(
+      { name, user_name: email, password },
+      "/api/user"
+    );
+    return await validaUserResponse(json);
   },
   currentToken: async () => {
     return await _currentToken();
@@ -144,7 +150,7 @@ const Api = {
   },
   atualizarUsuario: async (user) => {
     const token = await Api.currentToken();
-    console.log("****"+user.id  )
+    console.log("****" + user.id);
     return await doPost(user, "/api/user/" + user.id, token);
   },
 };

@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import Api from "../Api";
 import NavBar from "../componentes/login/NaveBar";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Autentication from "../componentes/Autentication";
+import Authentication from "../componentes/Authentication";
 import { Container, Col, Row, Button, Card, Modal } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 
@@ -37,9 +37,11 @@ const GrupoInfo = () => {
     setGrup(g.grupo);
     setMembros(g.grupo.membros);
     console.log(JSON.stringify(g.grupo.membros));
-    if (g.friend) {
+
+    if (g.friend && Object.keys(g.friend).length === 0) {
       setfFiend(g.friend);
-    }
+    } else setfFiend(null);
+
     return true;
   };
 
@@ -82,7 +84,7 @@ const GrupoInfo = () => {
   };
 
   return (
-    <Autentication>
+    <Authentication>
       <NavBar></NavBar>
       <Container>
         <section className="url-shortener">
@@ -118,17 +120,20 @@ const GrupoInfo = () => {
             </div>
           )}
 
-          <div className="shadow-none p-3 mb-5 bg-white rounded">
-            <Row>
-              {friend && revelar ? (
-                <MemberGrupItem item={friend}>
-                  {getBtnMostrarAmigo()}
-                </MemberGrupItem>
-              ) : (
-                amigoOculto()
-              )}
-            </Row>
-          </div>
+          {/* Amigo oculto */}
+          {friend && Object.keys(friend).length > 0 && (
+            <div className="shadow-none p-3 mb-5 bg-white rounded">
+              <Row>
+                {revelar ? (
+                  <MemberGrupItem item={friend}>
+                    {getBtnMostrarAmigo()}
+                  </MemberGrupItem>
+                ) : (
+                  amigoOculto()
+                )}
+              </Row>
+            </div>
+          )}
         </section>
         <div className="shadow-none p-3 mb-5 bg-white rounded">
           <h2 className="title mb-0">Membros:</h2>
@@ -136,16 +141,7 @@ const GrupoInfo = () => {
           <Row gutter={40}>
             {membros &&
               membros.map((item) => {
-                return (
-                  <MemberGrupItem
-                    xs={{ span: 6 }}
-                    sm={{ span: 4 }}
-                    md={{ span: 3 }}
-                    lg={{ span: 2 }}
-                    xl={{ span: 1 }}
-                    item={item.user}
-                  ></MemberGrupItem>
-                );
+                return <MemberGrupItem item={item.user}></MemberGrupItem>;
               })}
           </Row>
         </div>
@@ -170,7 +166,7 @@ const GrupoInfo = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </Autentication>
+    </Authentication>
   );
 };
 

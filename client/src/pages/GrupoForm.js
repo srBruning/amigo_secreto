@@ -8,7 +8,7 @@ import {
 } from "react-bootstrap";
 
 import { useHistory, Link } from "react-router-dom";
-import Autentication from "../componentes/Autentication";
+import Authentication from "../componentes/Authentication";
 
 const GrupoForm = () => {
   const history = useHistory();
@@ -41,7 +41,7 @@ const GrupoForm = () => {
   };
 
   return (
-    <Autentication>
+    <Authentication>
      <NavBar></NavBar>
       <Container>
         <section className="url-shortener">
@@ -77,7 +77,7 @@ const GrupoForm = () => {
           </div>
         </section>
       </Container>
-    </Autentication>
+    </Authentication>
   );
 };
 

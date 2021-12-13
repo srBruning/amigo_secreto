@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { useHistory, Link } from "react-router-dom";
 import NavBar from "../componentes/login/NaveBar";
-import { useRollbar } from '@rollbar/react';
+import { useRollbar } from "@rollbar/react";
 
 import Api from "../Api";
-import { validaUserResponse } from "../dao/UserDao"; 
-
+import { getChaveGrupo, removeChaveGrupo } from "../dao/UserDao";
 class SignUpClass extends Component {
   constructor() {
     super();
@@ -20,10 +19,9 @@ class SignUpClass extends Component {
     };
 
     this.handleSingUpClike = this.handleSingUpClike.bind(this);
-   
   }
 
-  handleSingUpClike(event) {
+  validarForm(event) {
     if (event) {
       this.setState({ validated: true });
       const form = event.currentTarget;
@@ -31,43 +29,72 @@ class SignUpClass extends Component {
       event.preventDefault();
       event.stopPropagation();
       if (!form.checkValidity()) {
-        return;
+        return false;
       }
     }
     if (this.state.passwordField !== this.state.rePasswordField) {
       alert("Senhas não confere!");
-      return;
+      return false;
     }
+    return true;
+  }
+
+  tratarErroResponse(json) {
+    if (json.message) {
+      alert(json.message);
+    } else if (json.fields_errors && json.fields_errors.length > 0) {
+      if (json.fields_errors[0].path === "user_name") {
+        alert("E-mail inválido");
+        return;
+      }
+    }
+    // Armazena erros não tratados no RollBar
+    this.props.rollbar.log(
+      "[post/user] unexpected error: " + JSON.stringify(json)
+    );
+    alert("Erro inesperado");
+  }
+
+  /**
+   * Mostrar menssagem de sucesso e navaga para /Home
+   */
+  sucesso() {
+    alert("Cadastrado com sucesso!");
+    // Goto home
+    const { history } = this.props;
+    if (history) history.push("/Perfil");
+  }
+
+  tratarSucesso(json) {
+    // Verifica se tem uma chave de grupo armazenado
+    // então inclui usuario no grupo
+    getChaveGrupo().then((key) => {
+      if (!key || key === "") {
+        this.sucesso();
+      } else {
+        removeChaveGrupo();
+        Api.entrarGrupo(key).then(() => {
+          this.sucesso();
+        });
+      }
+    });
+  }
+
+  handleSingUpClike(event) {
+    if (!this.validarForm(event)) return;
 
     Api.signUp(
       this.state.nomeField,
       this.state.emailField,
       this.state.passwordField
-    )
-      .then((json) => {
-        return validaUserResponse(json);
-      })
-      .then((json) => {
-        if (json.indValido) {
-          alert("cadastrado com sucesso!");
-          // Goto home
-          const { history } = this.props;
-          if (history) history.push("/Perfil");
-        } else {
-          event.preventDefault();
-
-          if (json.message) {
-            alert(json.message);
-          } else if (json.fields_errors && json.fields_errors.length > 0) {
-            if (json.fields_errors[0].path === "user_name") {
-              alert("E-mail inválido");
-              return;
-            }
-          }
-          this.props.rollbar.log("[post/user] unexpected error: " + JSON.stringify(json));
-          alert("Erro inesperado");
-        }
-      });
+    ).then((json) => {
+      if (json.indValido) {
+        this.tratarSucesso(json);
+      } else {
+        event.preventDefault();
+        this.tratarErroResponse(json);
+      }
+    });
   }
 
   handleChangeField(event) {
@@ -190,7 +217,6 @@ class SignUpClass extends Component {
   }
 }
 
-
 export const withHooks = (Component) => {
   return (props) => {
     const rollbar = useRollbar(); // <-- must have parent Provider
@@ -198,5 +224,5 @@ export const withHooks = (Component) => {
     return <Component rollbar={rollbar} history={history} {...props} />;
   };
 };
- 
+
 export default withHooks(SignUpClass);

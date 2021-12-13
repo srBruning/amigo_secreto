@@ -1,6 +1,11 @@
-import React, { Component, useEffect, useContext } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useLocation,
+} from "react-router-dom";
+import { guardaChaveGrupo } from "./dao/UserDao";
 import Home from "./pages/Home";
 import Preload from "./pages/Preload";
 import SignIn from "./pages/SignIn";
@@ -9,7 +14,7 @@ import GrupForm from "./pages/GrupoForm";
 import GrupoInfo from "./pages/GrupoInfo";
 import Perfil from "./pages/Perfil";
 import "./App.css";
-import { Provider, ErrorBoundary } from "@rollbar/react"; // <-- Provider imports 'rollbar' for us
+import { Provider } from "@rollbar/react"; // <-- Provider imports 'rollbar' for us
 
 // same configuration you would create for the Rollbar.js SDK
 const rollbarConfig = {
@@ -21,7 +26,19 @@ const rollbarConfig = {
   },
 };
 
+function useQuery() {
+  const { search } = useLocation();
+
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
+
 export default function App() {
+  const query = useQuery();
+  const pGrupo = query.get("grupo");
+  if (pGrupo && pGrupo !== "") {
+    guardaChaveGrupo(pGrupo);
+  }
+
   return (
     <Provider config={rollbarConfig}>
       <Router>

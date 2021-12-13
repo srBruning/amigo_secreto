@@ -13,7 +13,7 @@ import {
 } from "react-bootstrap";
 
 import { useHistory, Link } from "react-router-dom";
-import Autentication from "../componentes/Autentication";
+import Authentication from "../componentes/Authentication";
 
 const Home = () => {
   const history = useHistory();
@@ -96,7 +96,7 @@ const Home = () => {
   };
 
   return (
-    <Autentication>
+    <Authentication>
       <NavBar></NavBar>
       <Container>
         <section className="shadow p-3 mb-5 bg-white rounded">
@@ -134,7 +134,7 @@ const Home = () => {
           </Row>
         </div>
       </Container>
-    </Autentication>
+    </Authentication>
   );
 };
 

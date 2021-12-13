@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import Api from "../Api";
 import { useHistory } from "react-router-dom";
+import { removeChaveGrupo } from "../dao/UserDao";
 
-
-export default function Autentication(props) {
+export default function Authentication(props) {
   const history = useHistory();
 
   const validaToken = async () => {
@@ -15,6 +15,8 @@ export default function Autentication(props) {
         await Api.removeToken();
         return false;
       }
+      removeChaveGrupo();
+
       return true;
     }
     return false;
