@@ -5,9 +5,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Autentication from "../componentes/Autentication";
 import { Container, Col, Row, Button, Card, Modal } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
-import { SocialIcon } from "react-social-icons";
+
 import { useHistory } from "react-router-dom";
 import "../componentes/Buttons.css";
+import MemberGrupItem from "../componentes/MemberGrupItem";
 const GrupoInfo = () => {
   const location = useLocation();
   const history = useHistory();
@@ -56,18 +57,30 @@ const GrupoInfo = () => {
   useEffect(() => {
     if (id) buscarGrupo();
   }, []);
-  const montaSocialLik = (path, user) => {
-    console.log("___" + user);
-    if (!user) return user;
-    console.log("___" + user);
-    var pattern =
-      /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-    if (pattern.test(user)) {
-      return user;
-    }
 
-    return path + user;
+  const getBtnMostrarAmigo = () => {
+    return (
+      <Button
+        onClick={() => {
+          setRevelar(!revelar);
+        }}
+      >
+        {revelar ? "Ocultar" : "Mostrar meu amigo secreto"}
+      </Button>
+    );
   };
+  const amigoOculto = () => {
+    return (
+      <Card className="card col-12 col-sm-6 col-md-6 col-lg-4 card ">
+        <img className="card-img-top" src="/oculto.png" alt="Avatar" />
+        <div className="card-body">
+          <h5>Amigo Oculto</h5>
+        </div>
+        {getBtnMostrarAmigo()}
+      </Card>
+    );
+  };
+
   return (
     <Autentication>
       <NavBar></NavBar>
@@ -105,126 +118,33 @@ const GrupoInfo = () => {
             </div>
           )}
 
-          <Row>
-            {friend && (
-              <Card className="card col-12 col-sm-6 col-md-6 col-lg-4 ">
-                <img
-                  className="card-img-top"
-                  src={
-                    revelar
-                      ? friend.picture_avatar
-                        ? friend.picture_avatar.url
-                        : "/avatar.jpg"
-                      : "/oculto.png"
-                  }
-                  alt="Avatar"
-                />
-                {revelar ? (
-                  <div className="card-body">
-                    <h5 className="card-title">Amigo</h5>
-                    {friend.name}
-                    <h5 className="card-title">{friend.email}</h5>
-                    <h5 className="card-title">{friend.telefone}</h5>
-                    {friend.facebook && (
-                      <SocialIcon
-                        url={montaSocialLik(
-                          "https://www.facebook.com/",
-                          friend.facebook
-                        )}
-                      />
-                    )}
-                    {friend.instagram && (
-                      <SocialIcon
-                        url={montaSocialLik(
-                          "http://instagram.com/",
-                          friend.instagram
-                        )}
-                      />
-                    )}
-                    {friend.whatsapp && (
-                      <SocialIcon
-                        url={montaSocialLik(
-                          "https://api.whatsapp.com/send?phone=",
-                          friend.whatsapp
-                        )}
-                      />
-                    )}
-                    <div className="card-body">
-                      <Button
-                        onClick={() => {
-                          setRevelar(!revelar);
-                        }}
-                      >
-                        Ocultar meu amigo secreto
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="card-body">
-                    <Button
-                      onClick={() => {
-                        setRevelar(!revelar);
-                      }}
-                    >
-                      Mostrar meu amigo secreto
-                    </Button>
-                  </div>
-                )}
-              </Card>
-            )}
-          </Row>
+          <div className="shadow-none p-3 mb-5 bg-white rounded">
+            <Row>
+              {friend && revelar ? (
+                <MemberGrupItem item={friend}>
+                  {getBtnMostrarAmigo()}
+                </MemberGrupItem>
+              ) : (
+                amigoOculto()
+              )}
+            </Row>
+          </div>
         </section>
         <div className="shadow-none p-3 mb-5 bg-white rounded">
           <h2 className="title mb-0">Membros:</h2>
 
-          <Row>
+          <Row gutter={40}>
             {membros &&
               membros.map((item) => {
-                let url = item.user.picture_avatar
-                  ? item.user.picture_avatar.url
-                  : "/avatar.jpg";
                 return (
-                  <Col className="col-6 col-sm-6 col-md-6 col-lg-4">
-                    <Card key={item.id} className="card ">
-                      <img
-                        className="card-img-top"
-                        src={url}
-                        alt="Avatar"
-                      ></img>
-                      <div className="card-body">
-                        <h5 className="card-title">{item.user.name}</h5>
-                        <h5 className="card-title">{item.user.email}</h5>
-                        <h5 className="card-title">{item.user.telefone}</h5>
-                        {item.user.facebook && (
-                          <SocialIcon
-                            url={montaSocialLik(
-                              "https://www.facebook.com/",
-                              item.user.facebook
-                            )}
-                            target="_blank"
-                          />
-                        )}
-                        {item.user.instagram && (
-                          <SocialIcon
-                            url={montaSocialLik(
-                              "https://instagram.com/",
-                              item.user.instagram
-                            )}
-                            target="_blank"
-                          />
-                        )}
-                        {item.user.whatsapp && (
-                          <SocialIcon
-                            url={montaSocialLik(
-                              "https://api.whatsapp.com/send?phone=",
-                              item.user.whatsapp
-                            )}
-                            target="_blank"
-                          />
-                        )}
-                      </div>
-                    </Card>
-                  </Col>
+                  <MemberGrupItem
+                    xs={{ span: 6 }}
+                    sm={{ span: 4 }}
+                    md={{ span: 3 }}
+                    lg={{ span: 2 }}
+                    xl={{ span: 1 }}
+                    item={item.user}
+                  ></MemberGrupItem>
                 );
               })}
           </Row>
