@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@rollbar/react": "^0.8.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -11,12 +12,14 @@
     "react": "^17.0.2",
     "react-activity": "^2.1.1",
     "react-bootstrap": "^2.0.3",
+    "react-bootstrap-maskedinput": "^0.5.0",
     "react-cookies": "^0.1.1",
     "react-dom": "^17.0.2",
     "react-image-file-resizer": "^0.4.7",
     "react-router-dom": "5.2.0",
     "react-scripts": "4.0.3",
     "react-social-icons": "^5.6.1",
+    "rollbar": "^2.24.0",
     "styled-components": "^5.3.3",
     "web-vitals": "^1.0.1"
   },
@@ -43,5 +46,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@cypress/react": "^5.10.3",
+    "@cypress/webpack-dev-server": "^1.7.0",
+    "cypress": "^9.1.1"
   }
 }

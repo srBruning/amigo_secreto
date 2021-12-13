@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Api from "../Api";
-import {
-  Container,
-  Row,
-  Col,
-  Button,
-  Form,
-  ButtonGroup,
-} from "react-bootstrap";
+import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import MaskedFormControl from "react-bootstrap-maskedinput";
 import FileUpload from "../componentes/FileUpload";
 import Autentication from "../componentes/Autentication";
 import { Dots } from "react-activity";
@@ -35,6 +29,7 @@ const Perfil = () => {
   const handleChangeField = (event) => {
     let fieldName = event.target.name;
     let fleldVal = event.target.value;
+
     const obj = {};
     obj[fieldName] = fleldVal;
 
@@ -42,7 +37,6 @@ const Perfil = () => {
   };
 
   const handleSaveClike = (e) => {
-    
     e.preventDefault();
     e.stopPropagation();
     if (e.nativeEvent) e.nativeEvent.stopImmediatePropagation();
@@ -50,7 +44,7 @@ const Perfil = () => {
     const send = Object.fromEntries(
       Object.entries(perfil).filter(([_, v]) => v != null)
     );
-    
+
     if (
       indPassword &&
       (send.password == null || send.password !== send.rePassword)
@@ -58,15 +52,14 @@ const Perfil = () => {
       alert("Senhas não confere!");
       return;
     }
-    
 
     Api.atualizarUsuario(send).then((json) => {
-      
       if (json.error) {
         alert("Erro: " + json.error);
         return;
       }
-      alert("Atualizado com sucesso!")
+
+      alert("Atualizado com sucesso!");
       return buscarPerfil();
     });
   };
@@ -159,12 +152,15 @@ const Perfil = () => {
 
             <Form.Group className="mb-3" onChange={(t) => handleChangeField(t)}>
               <Form.Label>Numero do whatsapp</Form.Label>
-              <Form.Control
+              <MaskedFormControl
+                onChange={(t) => handleChangeField(t)}
                 defaultValue={perfil.whatsapp}
-                placeholder="54992863393"
+                value={perfil.whatsapp}
+                placeholder="(11) 1 1111-1111"
                 aria-label="Numero do whatsapp"
                 aria-describedby="basic-addon1"
                 name="whatsapp"
+                mask="(11) 1 1111-1111"
                 required
               />
             </Form.Group>

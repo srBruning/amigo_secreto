@@ -2,13 +2,15 @@ import React, { Component } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { withRouter, Link } from "react-router-dom";
 import NavBar from "../componentes/login/NaveBar";
+import { useRollbar } from '@rollbar/react';
 
 import Api from "../Api";
-import { validaUserResponse } from "../dao/UserDao";
+import { validaUserResponse } from "../dao/UserDao"; 
 
 class SignUpClass extends Component {
   constructor() {
     super();
+
     this.state = {
       nomeField: "",
       emailField: "",
@@ -18,6 +20,7 @@ class SignUpClass extends Component {
     };
 
     this.handleSingUpClike = this.handleSingUpClike.bind(this);
+   
   }
 
   handleSingUpClike(event) {
@@ -52,7 +55,17 @@ class SignUpClass extends Component {
           if (history) history.push("/Perfil");
         } else {
           event.preventDefault();
-          alert(json.message);
+
+          if (json.message) {
+            alert(json.message);
+          } else if (json.fields_errors && json.fields_errors.length > 0) {
+            if (json.fields_errors[0].path === "user_name") {
+              alert("E-mail inválido");
+              return;
+            }
+          }
+          this.props.rollbar.log("[post/user] unexpected error: " + JSON.stringify(json));
+          alert("Erro inesperado");
         }
       });
   }
@@ -177,4 +190,13 @@ class SignUpClass extends Component {
   }
 }
 
-export default withRouter(SignUpClass);
+
+export const withHooks = (Component) => {
+  return (props) => {
+    const rollbar = useRollbar(); // <-- must have parent Provider
+    
+    return <Component rollbar={rollbar} {...props} />;
+  };
+};
+ 
+export default withHooks(SignUpClass);

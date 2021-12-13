@@ -1,7 +1,7 @@
 import cookie from "react-cookies";
 import axios from "axios";
 
-const BASE_API = process.env.APP_URL;
+const BASE_API = process.env.REACT_APP_API;//"http://207.154.237.32:4646";
 
 const _currentToken = async () => {
   let token = await cookie.load("token");
