@@ -103,6 +103,8 @@ const drawFriends = async (grupo_id) => {
     aux = userGrup;
     await userGrup.save();
   }
+
+  return list;
 };
 
 export { tratarErroCadastro, drawFriends, findByGrupId };

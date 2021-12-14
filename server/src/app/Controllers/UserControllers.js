@@ -23,7 +23,7 @@ class UserController {
 
       const user = await User.create(req.body);
 
-      return await res.json(uService.login(user));
+      return await res.json(await uService.login(user));
     } catch (err) {
       if (err.code) return res.status(err.code).send(err);
 
@@ -40,8 +40,8 @@ class UserController {
     try {
       if (req.params.id != req.userId) return unauthorized(res);
 
-      passwordValidate(_user);
       const _user = authorizedserFields(req.body);
+      passwordValidate(_user);
 
       const user = await User.findByPk(req.userId);
       if (user == null) return res.status(404);
