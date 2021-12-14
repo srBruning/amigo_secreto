@@ -73,7 +73,6 @@ const alterarPictureAvatar = async (user, file) => {
 module.export = {
   login,
   passwordValidate,
-  formatarError,
   authorizedserFields,
   findUserById,
   padronizaCamposFile,
