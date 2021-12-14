@@ -1,4 +1,4 @@
-const rollbar = required("../../rollbar");
+const rollbar = require('../../rollbar')
 
 const unauthorized = (res) => {
   return res
