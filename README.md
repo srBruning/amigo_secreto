@@ -1,70 +1,108 @@
-# Getting Started with Create React App
+# Amigo Secreto Online App
+## Funcionalidades
+* Crude de usuários
+* Perfil com foto
+* Cadastro de grupos
+* Associação a grupos por chave compartilhada
+* Sorteio de amigo oculto 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Telas
+![EAR das tabelas](https://raw.githubusercontent.com/srBruning/amigo_secreto/main/screenshots/login.png)
+![EAR das tabelas](https://raw.githubusercontent.com/srBruning/amigo_secreto/main/screenshots/registro.png)
+![EAR das tabelas](https://raw.githubusercontent.com/srBruning/amigo_secreto/main/screenshots/home.png)
+![EAR das tabelas](https://raw.githubusercontent.com/srBruning/amigo_secreto/main/screenshots/grupo.png)
 
-## Available Scripts
 
-In the project directory, you can run:
+## Demo
+A aplicação esta funcionado como demostração em [dibr.cc](https://dibr.cc)
 
-### `yarn start`
+## Modelagem
+![EAR das tabelas](https://raw.githubusercontent.com/srBruning/amigo_secreto/desenv/modeling/erd.svg)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+##  back-end
+o back-and foi desenvolvido com banco de dados mysql e com a linguagem javascript utilizando NodeJs
+para versionamento de banco foi utilizado a biblioteca [Sequelize ORM](https://sequelize.org/) 
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+#### Configurações 
+* Base de dados 
+É preciso  configura no arquivo /server/.env NAME_DB, USERNMAE_DB e PASSWORD_DB 
+* Armazenamento de imagens
+O armazenamento é feito em Amazon S3 (s3)  ou em arquivo no servidor (local) 
+é preciso configurar no arquivo /server/.env os campos  
+STORAGE_TYPE (local ou s3) 
+AWS_ACCESS_KEY_ID 
+AWS_SECRET_ACCESS_KEY 
+AWS_DEFAULT_REGION 
+* Geração de token
+É preciso  configura no arquivo /server/.env  o campo SECRET com a palavra secreta para geração dos token de autenticação. 
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+# /server/.env
+APP_URL=http://localhost:3636
+PORTA=3636
+STORAGE_TYPE=S3
+SECRET=my_secret
+AWS_ACCESS_KEY_ID=my_aws_access_key_id
+AWS_SECRET_ACCESS_KEY=my_aws_secret_access_key
+AWS_DEFAULT_REGION=my_default_region
+NAME_DB=amigo_secreto
+USERNMAE_DB=admin
+PASSWORD_DB=PASSWORD_DB
+```
+### Instalação e execução 
+* Instalando Dependências
+```bash
+$ cd server/
+$ yarn 
+$ # criando as tabelas
+$ npx sequelize-cli db:migrate
+```
+* Atualizado o Banco
+```bash
+$ cd server/
+$ # run migrations
+$ npx sequelize-cli db:migrate
+```
+* executando 
 
-### `yarn build`
+```bash
+$ # em desenvolvimento
+$ yarn dev
+```
+```bash
+$ # em produção
+$ yarn start
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+##  Front-end
+No front-end foi desenvolvido uma SPA  utilizado React Js.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Configuração
+precisamos configurar os aquivos ``/client/.env.local`` e ``/client/.env.prodution`` com o endereço do back-end e a chave do RollBar
 
-### `yarn eject`
+```bash
+# /client/.env.local
+REACT_APP_API=http://207.154.237.32:4646
+REACT_APP_ROLLBAR_CLINT_KEY=ROLLBAR_CLINT_KEY
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Instalação e Execução 
+* instalando dependências
+```bash
+$ cd clinet/
+$ yarn
+```
+* Executando 
+```bash
+$ # desenvolvimento
+$ yarn run start
+$ # in http://localhost:3000
+```
+Para rodar em produção precisamos exportar para arquivos estáticos com o comando ``build`` e disponibilizar no servidor
+```bash
+$ yarn build 
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
