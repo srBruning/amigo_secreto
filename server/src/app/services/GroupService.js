@@ -44,4 +44,4 @@ const groupSave = async (pGrup, user_id) => {
   }
 };
 
-export { makeKey, groupSave };
+module.export =  { makeKey, groupSave };

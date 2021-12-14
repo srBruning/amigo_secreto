@@ -64,6 +64,7 @@ const padronizaCamposFile = (req) => {
     } else req.file.Location = `${process.env.APP_URL}/files/${req.file.Key}`;
   }
 };
+
 const alterarPictureAvatar = async (user, file) => {
   user.picture_avatar = await AppPicture.create({
     url: file.Location,
@@ -76,7 +77,7 @@ const alterarPictureAvatar = async (user, file) => {
   return user;
 };
 
-export {
+module.export = {
   login,
   passwordValidate,
   formatarError,

@@ -5,6 +5,6 @@ const unauthorized = (res)=>{
     .send({ error: "Usuario não tem permição para alterar" });
 }
 
-export {
+module.export =  {
     unauthorized,
 }

@@ -18,7 +18,7 @@ import { Provider } from "@rollbar/react"; // <-- Provider imports 'rollbar' for
 
 // same configuration you would create for the Rollbar.js SDK
 const rollbarConfig = {
-  accessToken: "271619f8003640acad2fdbd56d668e06",
+  accessToken: process.env.REACT_APP_ROLLBAR_CLINT_KEY,
   environment: "production",
   server: {
     root: process.env.REACT_APP_API,
