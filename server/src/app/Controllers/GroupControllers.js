@@ -1,13 +1,12 @@
 require("dotenv-safe").config();
-const jwt = require("jsonwebtoken");
 const AmGrupo = require("../models/AmGrupo");
 const UserGrupo = require("../models/UserGrupo");
-const { makeKey, grupSave } = require("../services/GroupService");
+const { makeKey, groupSave } = require("../services/GroupService");
 
 class GroupController {
   async store(req, res) {
     try {
-      const groupo = await grupSave(req.body, req.userId);
+      const groupo = await groupSave(req.body, req.userId);
       return res.json(groupo);
     } catch (err) {
       if (err.message) return res.status(400).send(err);

@@ -1,4 +1,7 @@
 const UserGrupo = require("../models/UserGrupo");
+const User = require("../models/User");
+const AmGrupo = require("../models/AmGrupo");
+const AppPicture = require("../models/AppPicture");
 
 const tratarErroCadastro = (err, res) => {
   if (err.name === "SequelizeForeignKeyConstraintError") {
@@ -29,7 +32,7 @@ const tratarErroCadastro = (err, res) => {
 };
 
 const findByGrupId = async (grupo_id, userId) => {
-  UserGrupo.findAll({
+  return await UserGrupo.findAll({
     where: {
       grupo_id: grupo_id,
       user_id: userId,
@@ -61,27 +64,45 @@ const findByGrupId = async (grupo_id, userId) => {
   });
 };
 
+const shuffle = (array) => {
+  let m = array.length,
+    t,
+    i;
 
-const drawFriends = (grupo_id)=>{
-    let list = await UserGrupo.findAll({
-        where: {
-          grupo_id: grupo_id,
-        },
-      });
+  // While there remain elements to shuffle…
+  while (m) {
+    // Pick a remaining element…
+    i = Math.floor(Math.random() * m--);
 
-      for (let index = 0; index < list.length; index++) {
-        const userGrup = list[index];
-        userGrup.drawn_user_id = null;
-        await userGrup.save();
-      }
-      list = shuffle(list);
-      let aux = list[list.length - 1];
-      for (let index = 0; index < list.length; index++) {
-        const userGrup = list[index];
-        userGrup.drawn_user_id = aux.user_id;
-        aux = userGrup;
-        await userGrup.save();
-      }
-}
+    // And swap it with the current element.
+    t = array[m];
+    array[m] = array[i];
+    array[i] = t;
+  }
+
+  return array;
+};
+
+const drawFriends = async (grupo_id) => {
+  let list = await UserGrupo.findAll({
+    where: {
+      grupo_id: grupo_id,
+    },
+  });
+
+  for (let index = 0; index < list.length; index++) {
+    const userGrup = list[index];
+    userGrup.drawn_user_id = null;
+    await userGrup.save();
+  }
+  list = shuffle(list);
+  let aux = list[list.length - 1];
+  for (let index = 0; index < list.length; index++) {
+    const userGrup = list[index];
+    userGrup.drawn_user_id = aux.user_id;
+    aux = userGrup;
+    await userGrup.save();
+  }
+};
 
 export { tratarErroCadastro, drawFriends, findByGrupId };

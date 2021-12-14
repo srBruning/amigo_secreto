@@ -1,4 +1,5 @@
 const UserGrupo = require("../models/UserGrupo");
+const AmGrupo = require("../models/AmGrupo");
 
 /**
  * Montar uma chave de grupo aleatória com o tamanho especificado mais um dígito verificador.
@@ -21,7 +22,7 @@ const makeKey = (length) => {
   return result + digito;
 };
 
-const grupSave = async (pGrup, user_id) => {
+const groupSave = async (pGrup, user_id) => {
   try {
     pGrup.chave = makeKey(6);
     pGrup.id_dono = user_id;
@@ -43,4 +44,4 @@ const grupSave = async (pGrup, user_id) => {
   }
 };
 
-export { makeKey, grupSave };
+export { makeKey, groupSave };

@@ -17,7 +17,7 @@ const login = async (user) => {
 
 //
 const passwordValidate = (password) => {
-  if (!_user.password || _user.password.length < 5) {
+  if (!password || password.length < 5) {
     throw {
       error: "the password must contain at least 5 characters",
       code: 400,
@@ -51,7 +51,7 @@ const findUserById = async (userid, group = false) => {
       include: [{ model: AmGrupo, as: "grupo" }],
     });
 
-  return await User.scope("withoutPassword").findByPk(id, {
+  return await User.scope("withoutPassword").findByPk(userid, {
     include,
   });
 };
@@ -64,7 +64,7 @@ const padronizaCamposFile = (req) => {
     } else req.file.Location = `${process.env.APP_URL}/files/${req.file.Key}`;
   }
 };
-const alterarPictureAvatar = (user, file) => {
+const alterarPictureAvatar = async (user, file) => {
   user.picture_avatar = await AppPicture.create({
     url: file.Location,
     key: file.Key,

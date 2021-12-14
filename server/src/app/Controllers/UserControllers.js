@@ -6,7 +6,7 @@ const AppPicture = require("../models/AppPicture");
 const pictureService = require("../services/PictureSevice");
 const uService = require("../services/UserService");
 const { unauthorized } = require("../services/ReturnServices");
-const { passwordValidate, formatarError, authorizedserFields, findUserById, padronizaCamposFile } =
+const { passwordValidate, formatarError, authorizedserFields, findUserById, padronizaCamposFile, alterarPictureAvatar } =
   uService;
 class UserController {
   
@@ -23,7 +23,7 @@ class UserController {
 
       const user = await User.create(req.body);
 
-      return res.json(uService.login(user));
+      return await res.json(uService.login(user));
     } catch (err) {
       if (err.code) return res.status(err.code).send(err);
 

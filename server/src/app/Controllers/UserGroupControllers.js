@@ -1,9 +1,6 @@
 require("dotenv-safe").config();
-const jwt = require("jsonwebtoken");
 const UserGrupo = require("../models/UserGrupo");
-const User = require("../models/User");
 const AmGrupo = require("../models/AmGrupo");
-const AppPicture = require("../models/AppPicture");
 const {
   tratarErroCadastro,
   drawFriends,
@@ -55,7 +52,7 @@ class UserGroupController {
 
   async byGrupId(req, res) {
     try {
-      const user_grupo = await findByGrupId();
+      const user_grupo = await findByGrupId(  req.params.grupo_id,   req.userId);
 
       if (user_grupo == undefined || user_grupo.length == 0) {
         return null;
@@ -96,23 +93,6 @@ class UserGroupController {
     }
   }
 }
-function shuffle(array) {
-  let m = array.length,
-    t,
-    i;
 
-  // While there remain elements to shuffle…
-  while (m) {
-    // Pick a remaining element…
-    i = Math.floor(Math.random() * m--);
-
-    // And swap it with the current element.
-    t = array[m];
-    array[m] = array[i];
-    array[i] = t;
-  }
-
-  return array;
-}
 
 module.exports = new UserGroupController();
