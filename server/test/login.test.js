@@ -22,11 +22,11 @@ describe("Teste Login", function () {
     };
 
     request(options, function (error, response, body) {
-      console.log(error);
-      console.log(response);
+
       console.log(body);
       expect(response.statusCode).to.equal(200);
-      expect(body.should.have.property("token")).to.equal(true);
+      expect(body.token && body.token.length>0).to.equal(true);
+      done();
     });
   });
 });
