@@ -7,15 +7,16 @@ const unauthorized = (res) => {
 };
 
 const internal = (res, err) => {
+  console.log(err)
   rollbar.log(err);
-  res.status(500).send(err);
+  return res.status(500).send(err);
 };
 
 const errorFormater = (err, res) => {
   if (err.name === "SequelizeValidationError")
     return res.status(400).send({ fields_errors: err.errors });
 
-  return internal(err);
+  return internal(res, err);
 };
 
 module.export = {

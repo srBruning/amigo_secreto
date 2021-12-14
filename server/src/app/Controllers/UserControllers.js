@@ -122,7 +122,7 @@ class UserController {
       return res.json(await uService.login(users ? users[0] : null));
     } catch (err) {
       if (err.code) return res.status(err.code).send(err);
-      errorFormater(err, res);
+      return errorFormater(err, res);
     }
   }
 
