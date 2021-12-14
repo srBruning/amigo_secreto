@@ -16,7 +16,13 @@ class SignUpClass extends Component {
       passwordField: "",
       rePasswordField: "",
       validated: false,
+      grupo: null,
     };
+    getChaveGrupo
+      .bind(this)()
+      .then((key) => {
+        this.state.grupo = key;
+      });
 
     this.handleSingUpClike = this.handleSingUpClike.bind(this);
   }
@@ -184,6 +190,8 @@ class SignUpClass extends Component {
                 {"As senhas não são iguais. Tente novamente."}
               </Form.Control.Feedback>
             </Form.Group>
+
+            <input type="hidden" id="grupo_key" name="grupo_key" value={this.state.grupo} />
 
             <div>
               {/* Submit Button  */}
