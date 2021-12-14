@@ -1,4 +1,9 @@
 # Amigo Secreto Online App
+
+## Demo
+A aplicação esta funcionado como demostração em [dibr.cc](https://dibr.cc)
+
+
 ## Funcionalidades
 * Crude de usuários
 * Perfil com foto
@@ -11,10 +16,6 @@
 ![EAR das tabelas](https://raw.githubusercontent.com/srBruning/amigo_secreto/main/screenshots/registro.png)
 ![EAR das tabelas](https://raw.githubusercontent.com/srBruning/amigo_secreto/main/screenshots/home.png)
 ![EAR das tabelas](https://raw.githubusercontent.com/srBruning/amigo_secreto/main/screenshots/grupo.png)
-
-
-## Demo
-A aplicação esta funcionado como demostração em [dibr.cc](https://dibr.cc)
 
 ## Modelagem
 ![EAR das tabelas](https://raw.githubusercontent.com/srBruning/amigo_secreto/desenv/modeling/erd.svg)
