@@ -86,7 +86,9 @@ const drawFriends = async (grupo_id) => {
       grupo_id: grupo_id,
     },
   });
-
+  if(!list || list.length==0){
+    throw {message: "nenhum usuario encontrado"}
+  }
   for (let index = 0; index < list.length; index++) {
     const userGrup = list[index];
     userGrup.drawn_user_id = null;
