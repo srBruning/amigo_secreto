@@ -113,6 +113,9 @@ class UserController {
 
   async login(req, res) {
     try {
+      if(! req.body.user_name ||  req.body.user_name==""){
+        return  res.status(400).send({ error: "nome de usuário é requerido" });
+      }
       const users = await User.findAll({
         where: {
           user_name: req.body.user_name,

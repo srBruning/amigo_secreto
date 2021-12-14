@@ -70,7 +70,8 @@ const alterarPictureAvatar = async (user, file) => {
   return user;
 };
 
-module.export = {
+
+module.exports = {
   login,
   passwordValidate,
   authorizedserFields,
