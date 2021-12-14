@@ -1,72 +1,54 @@
 require("dotenv-safe").config();
-const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const AmGrupo = require("../models/AmGrupo");
 const UserGrupo = require("../models/UserGrupo");
 const AppPicture = require("../models/AppPicture");
 const pictureService = require("../services/PictureSevice");
-
-async function _login(res, user) {
-  if (user) {
-    const token = await jwt.sign({ id: user.id }, process.env.SECRET, {
-      expiresIn: 10000,
-    });
-    return res.json({ id: user.id, token: token });
-  }
-  return res.status(404).send({ message: "não autorizado" });
-}
-
+const uService = require("../services/UserService");
+const { unauthorized } = require("../services/ReturnServices");
+const { passwordValidate, formatarError, authorizedserFields, findUserById, padronizaCamposFile } =
+  uService;
 class UserController {
+  
+  /**
+   * Salva um novo usuário e retorna o token
+   * @param {*} req
+   * @param {*} res
+   * @returns
+   */
   async store(req, res) {
     try {
       const _user = req.body;
-      if (!_user.password || _user.password.length < 5) {
-        return res
-          .status(400)
-          .send({ error: "the password must contain at least 5 characters" });
-      }
+      passwordValidate(_user);
 
       const user = await User.create(req.body);
-      const token = await jwt.sign({ id: user.id }, process.env.SECRET, {
-        expiresIn: 10000,
-      });
-      user.password = undefined;
-      return res.json({ id: user.id, token: token });
+
+      return res.json(uService.login(user));
     } catch (err) {
+      if (err.code) return res.status(err.code).send(err);
+
       if (err.name === "SequelizeUniqueConstraintError")
         return res
           .status(400)
           .send({ message: "nome de usuário ja esta em uso" });
 
-      if (err.name === "SequelizeValidationError")
-        return res.status(400).send({ fields_errors: err.errors });
-
-      res.status(500).send({ error: err });
+      return formatarError(err, res);
     }
   }
 
   async update(req, res) {
     try {
-      if (req.params.id != req.userId)
-        return res
-          .status(401)
-          .send({ error: "Usuario não tem permição para alterar" });
+      if (req.params.id != req.userId) return unauthorized(res);
 
-      const _user = req.body;
-      if (_user.password && _user.password.length < 5) {
-        return res.status(400).send({ error: "Senha muito pequena" });
-      }
-
-      _user.user_name = undefined;
-      _user.picture_avatar_id = undefined;
-      _user.picture_avatar = undefined;
+      passwordValidate(_user);
+      const _user = authorizedserFields(req.body);
 
       const user = await User.findByPk(req.userId);
       if (user == null) return res.status(404);
 
       user.update(_user);
-
       user.save();
+
       user.password = undefined;
       return res.json(user);
     } catch (err) {
@@ -75,10 +57,7 @@ class UserController {
           .status(400)
           .send({ message: "nome de usuário ja esta em uso" });
 
-      if (err.name === "SequelizeValidationError")
-        return res.status(400).send({ fields_errors: err.errors });
-
-      res.status(500).send({ error: err });
+      return formatarError(err, res);
     }
   }
 
@@ -94,24 +73,8 @@ class UserController {
   async show(req, res) {
     try {
       const id = req.params && req.params.id ? req.params.id : req.userId;
-      const modelUserGrup =
-        req.params && req.params.id
-          ? UserGrupo.scope("withoutFriend")
-          : UserGrupo;
-      const users = await User.scope("withoutPassword").findByPk(id, {
-        include: [
-          {
-            model: modelUserGrup,
-            as: "grupos",
-            include: [
-              { model: AmGrupo, as: "grupo" },
-              { model: User.scope("withoutPassword"), as: "friend" },
-            ],
-          },
-          { model: AppPicture, as: "picture_avatar" },
-        ],
-      });
-      return res.json(users);
+
+      return res.json(await findUserById(id, true));
     } catch (err) {
       res.status(500).send({ error: err.message, stack: err.stack });
     }
@@ -119,27 +82,14 @@ class UserController {
 
   async updateAvatar(req, res) {
     try {
-      if (!req.file.Location) {
-        if (req.file.xs) {
-          req.file.Key = req.file.key;
-          req.file.Location = req.file.xs.Location;
-        } else
-          req.file.Location = `${process.env.APP_URL}/files/${req.file.Key}`;
-      }
 
-      const user = await User.findByPk(req.userId, {
-        include: { model: AppPicture, as: "picture_avatar" },
-      });
+      padronizaCamposFile(req);
+
+      const user = await findUserById(req.userId);
 
       const current_picture_avatar = user.picture_avatar;
-
-      user.picture_avatar = await AppPicture.create({
-        url: req.file.Location,
-        key: req.file.Key,
-        original_name: req.file.originalname,
-      });
-      user.picture_avatar_id = user.picture_avatar.id;
-      user.save();
+      
+      alterarPictureAvatar(user, req.file)
 
       if (current_picture_avatar)
         try {
@@ -162,8 +112,10 @@ class UserController {
           password: req.body.password,
         },
       });
-      return await _login(res, users ? users[0] : null);
+      return res.json(await uService.login(users ? users[0] : null));
     } catch (err) {
+      if (err.code) return res.status(err.code).send(err);
+
       return res.status(500).send({ error: err.message, stack: err.stack });
     }
   }
@@ -171,8 +123,9 @@ class UserController {
   async refresh(req, res) {
     try {
       const user = await User.findByPk(req.userId);
-      return await _login(res, user);
+      return res.json(await uService.login(user));
     } catch (err) {
+      if (err.code) return res.status(err.code).send(err);
       res.status(500).send({ error: err });
     }
   }
