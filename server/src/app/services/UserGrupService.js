@@ -104,4 +104,5 @@ const drawFriends = async (grupo_id) => {
   return list;
 };
 
-module.export =  { tratarErroCadastro, drawFriends, findByGrupId };
+
+module.exports =  { tratarErroCadastro, drawFriends, findByGrupId };

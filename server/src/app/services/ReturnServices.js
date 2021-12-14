@@ -19,7 +19,8 @@ const errorFormater = (err, res) => {
   return internal(res, err);
 };
 
-module.export = {
+
+module.exports  = {
   unauthorized,
   internal,
   errorFormater,
