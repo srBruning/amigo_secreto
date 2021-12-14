@@ -1,6 +1,7 @@
 require("dotenv-safe").config();
 const UserGrupo = require("../models/UserGrupo");
 const AmGrupo = require("../models/AmGrupo");
+const {internal, errorFormater, unauthorized} = require('../services/ReturnServices');
 const {
   tratarErroCadastro,
   drawFriends,
@@ -44,9 +45,7 @@ class UserGroupController {
 
       return res.json(user_grupo);
     } catch (err) {
-      res
-        .status(500)
-        .send({ error: err, message: err.message, stack: err.stack });
+      internal(err, res);
     }
   }
 
@@ -63,9 +62,7 @@ class UserGroupController {
 
       return res.json(ret);
     } catch (err) {
-      res
-        .status(500)
-        .send({ error: err, message: err.message, stack: err.stack });
+      internal(err, res);
     }
   }
 
@@ -87,9 +84,7 @@ class UserGroupController {
       await grupo.save();
       return res.json(list);
     } catch (err) {
-      res
-        .status(500)
-        .send({ error: err, message: err.message, stack: err.stack });
+      internal(err, res);
     }
   }
 }

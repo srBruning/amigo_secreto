@@ -27,13 +27,6 @@ const passwordValidate = (password) => {
   return true;
 };
 
-const formatarError = (err, res) => {
-  if (err.name === "SequelizeValidationError")
-    return res.status(400).send({ fields_errors: err.errors });
-
-  return res.status(500).send({ error: err });
-};
-
 const authorizedserFields = (user) => {
   user.user_name = undefined;
   user.picture_avatar_id = undefined;

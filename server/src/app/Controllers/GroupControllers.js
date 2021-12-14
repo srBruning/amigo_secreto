@@ -2,6 +2,8 @@ require("dotenv-safe").config();
 const AmGrupo = require("../models/AmGrupo");
 const UserGrupo = require("../models/UserGrupo");
 const { makeKey, groupSave } = require("../services/GroupService");
+const rollbar = require("../../rollbar");
+const {internal} = require('../services/ReturnServices');
 
 class GroupController {
   async store(req, res) {
@@ -20,9 +22,7 @@ class GroupController {
       const grupos = await AmGrupo.findAll();
       return res.json(grupos);
     } catch (err) {
-      res
-        .status(500)
-        .send({ error: err, message: err.message, stack: err.stack });
+      internal(res, err);
     }
   }
 
@@ -39,7 +39,7 @@ class GroupController {
       });
       return res.json(grupo);
     } catch (err) {
-      res.status(500).send({ error: err.message });
+      internal(res, err);
     }
   }
 }

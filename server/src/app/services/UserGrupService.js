@@ -2,6 +2,7 @@ const UserGrupo = require("../models/UserGrupo");
 const User = require("../models/User");
 const AmGrupo = require("../models/AmGrupo");
 const AppPicture = require("../models/AppPicture");
+const {internal, errorFormater, unauthorized} = require('../services/ReturnServices');
 
 const tratarErroCadastro = (err, res) => {
   if (err.name === "SequelizeForeignKeyConstraintError") {
@@ -24,11 +25,7 @@ const tratarErroCadastro = (err, res) => {
   if (err.name === "SequelizeValidationError")
     return res.status(400).send({ fields_errors: err.errors });
 
-  return res.status(500).send({
-    message: err.message,
-    stack: err.stack,
-    fields_errors: err.errors,
-  });
+    return internal(err, res);  
 };
 
 const findByGrupId = async (grupo_id, userId) => {

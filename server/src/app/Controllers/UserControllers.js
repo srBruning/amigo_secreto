@@ -5,11 +5,19 @@ const UserGrupo = require("../models/UserGrupo");
 const AppPicture = require("../models/AppPicture");
 const pictureService = require("../services/PictureSevice");
 const uService = require("../services/UserService");
-const { unauthorized } = require("../services/ReturnServices");
-const { passwordValidate, formatarError, authorizedserFields, findUserById, padronizaCamposFile, alterarPictureAvatar } =
-  uService;
+const {
+  internal,
+  errorFormater,
+  unauthorized,
+} = require("../services/ReturnServices");
+const {
+  passwordValidate,
+  authorizedserFields,
+  findUserById,
+  padronizaCamposFile,
+  alterarPictureAvatar,
+} = uService;
 class UserController {
-  
   /**
    * Salva um novo usuário e retorna o token
    * @param {*} req
@@ -32,7 +40,7 @@ class UserController {
           .status(400)
           .send({ message: "nome de usuário ja esta em uso" });
 
-      return formatarError(err, res);
+      return errorFormater(err, res);
     }
   }
 
@@ -57,7 +65,7 @@ class UserController {
           .status(400)
           .send({ message: "nome de usuário ja esta em uso" });
 
-      return formatarError(err, res);
+      return errorFormater(err, res);
     }
   }
 
@@ -76,20 +84,19 @@ class UserController {
 
       return res.json(await findUserById(id, true));
     } catch (err) {
-      res.status(500).send({ error: err.message, stack: err.stack });
+      errorFormater(err, res);
     }
   }
 
   async updateAvatar(req, res) {
     try {
-
       padronizaCamposFile(req);
 
       const user = await findUserById(req.userId);
 
       const current_picture_avatar = user.picture_avatar;
-      
-      alterarPictureAvatar(user, req.file)
+
+      alterarPictureAvatar(user, req.file);
 
       if (current_picture_avatar)
         try {
@@ -100,7 +107,7 @@ class UserController {
 
       return res.json({ id: user.id, picture_avatar: user.picture_avatar });
     } catch (err) {
-      res.status(500).send({ error: err.message, stack: err.stack });
+      errorFormater(err, res);
     }
   }
 
@@ -115,8 +122,7 @@ class UserController {
       return res.json(await uService.login(users ? users[0] : null));
     } catch (err) {
       if (err.code) return res.status(err.code).send(err);
-
-      return res.status(500).send({ error: err.message, stack: err.stack });
+      errorFormater(err, res);
     }
   }
 
@@ -126,7 +132,7 @@ class UserController {
       return res.json(await uService.login(user));
     } catch (err) {
       if (err.code) return res.status(err.code).send(err);
-      res.status(500).send({ error: err });
+      errorFormater(err, res);
     }
   }
 }
