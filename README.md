@@ -105,5 +105,6 @@ Para rodar em produção precisamos exportar para arquivos estáticos com o coma
 ```bash
 $ yarn build 
 ```
+ 
 
 
