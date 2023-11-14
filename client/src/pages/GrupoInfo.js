@@ -32,13 +32,11 @@ const GrupoInfo = () => {
     const g = await Api.buscarGrupo(id);
     if (!g || !g.grupo) return;
 
-    console.log(JSON.stringify(g));
     setUserGrup(g);
     setGrup(g.grupo);
     setMembros(g.grupo.membros);
-    console.log(JSON.stringify(g.grupo.membros));
 
-    if (g.friend && Object.keys(g.friend).length === 0) {
+    if (g.friend && Object.keys(g.friend).length > 0) {
       setfFiend(g.friend);
     } else setfFiend(null);
 
@@ -51,8 +49,6 @@ const GrupoInfo = () => {
     }
 
     const ret = await Api.sortear(userGrup.grupo_id);
-    console.log("#3");
-    console.log(JSON.stringify(ret));
     history.push("/Home");
   };
 
