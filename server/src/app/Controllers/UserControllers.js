@@ -116,12 +116,24 @@ class UserController {
       if(! req.body.user_name ||  req.body.user_name==""){
         return  res.status(400).send({ error: "nome de usuário é requerido" });
       }
-      const users = await User.findAll({
+      let users = await User.findAll({ 
         where: {
+          user_name: Sequelize.fn('lower', Sequelize.col('name') 
           user_name: req.body.user_name,
           password: req.body.password,
         },
       });
+      if(!users || users.length==0){
+
+         users = await User.findAll({ 
+          where: {
+            user_name: Sequelize.and(
+              "lower(user_name) =lower( '"+req.body.user_name+"')", 
+              { password: req.body.password}
+            ) 
+          },
+        });
+      }
       return res.json(await uService.login(users ? users[0] : null));
     } catch (err) {
       if (err.code) return res.status(err.code).send(err);
